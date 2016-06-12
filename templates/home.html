@@ -1,0 +1,68 @@
+<html>
+<title>Status</title>
+
+<body>
+<h1 style="background-color:blue;margin-bottom:20%;color:white;text-align:center">Unix Dashboard</h1>
+<table id="recordLength" border="3" bgcolor="white" class='familyclass' style="border-radius:10px;float:top;text-align:center;margin-top:-260px;background-color:white;border-color:blue">
+    </table>
+    
+ 
+ <style type="text/css">
+  button{
+    font-size: 15px;
+    font-family: verdana;
+    
+  }
+  select{
+    margin-left:40px;
+  }
+  a{
+    color: white;
+    font-family: verdana;
+    font-weight: bold;
+  }
+</style>
+<script src="{{ STATIC_URL }}js/min.js"></script>
+<script type="text/javascript">
+
+function subject(){
+  // alert('a')
+  $.ajax({
+      type:'POST',
+      url:'/state/',
+      data:{
+        csrfmiddlewaretoken: '{{csrf_token}}',
+      },
+    success : function(response){
+      var data=response['data'];
+      var str_head = '<th>IP</th><th>FQDN </th><th>ServerName </th><th>ServerOwner </th><th>AppliactionName</th>'
+      var str ='';
+      document.getElementById('recordLength').value = data.length;
+      for(i=0;i<data.length;i++)
+      {
+          var IP=data[i]['IP'];
+          var FQDN=data[i]['FQDN'];
+          var ServerName=data[i]['ServerName'];
+          var ServerOwner=data[i]['ServerOwner'];
+          var AppliactionName=data[i]['AppliactionName'];
+          // var SupportGroupDL  =data[i]['SupportGroupDL'];
+          // var Console=data[i]['Console'];
+          // var MachineType=data[i]['MachineType'];
+          // var SiteType=data[i]['SiteType'];
+            
+          str += '<tr><td>'+IP+'</td><td>'+FQDN+'</td><td>'+ServerName+'</td><td>'+ServerOwner+'</td><td>'+AppliactionName+'</td></tr>';
+            
+        }
+            var html = '<table><tr>'+str_head +'</tr>'+str+'</table>';
+            $('.familyclass').append(html)
+            
+      },
+    });
+  }
+  $( document ).ready(function() {
+    console.log( "ready!" );
+    subject();
+});
+  </script>
+</body>
+</html>
