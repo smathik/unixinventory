@@ -1,27 +1,33 @@
-<html>
-<title>Status</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
+<head>
+<title>Unixinventory</title>
+
+<link rel="stylesheet" href="{{STATIC_URL}}css/home.css"> 
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js" ></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-bp.js" ></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/navigation.js" ></script>
+</head>
 <body>
-<h1 style="background-color:blue;margin-bottom:20%;color:white;text-align:center">Unix Dashboard</h1>
-<table id="recordLength" border="3" bgcolor="white" class='familyclass' style="border-radius:10px;float:top;text-align:center;margin-top:-260px;background-color:white;border-color:blue">
-    </table>
-    
- 
- <style type="text/css">
-  button{
-    font-size: 15px;
-    font-family: verdana;
-    
-  }
-  select{
-    margin-left:40px;
-  }
-  a{
-    color: white;
-    font-family: verdana;
-    font-weight: bold;
-  }
-</style>
+  <div id="header"></div>
+  <div id="navigation" class="container">
+    <div id="home" class="pri-nav active"><div><a href="home">home</a></div></div>
+    <div id="about" class="pri-nav"><div><a href="about">about</a></div></div>
+    <div id="services" class="pri-nav"><div><a href="services">services</a></div></div>
+    <div id="solutions" class="pri-nav"><div><a href="solutions">solutions</a></div></div>
+    <div id="contact" class="pri-nav"><div><a href="contact">contact</a></div></div>
+  </div>
+  <div class="container">
+    <div class="content">
+      <!-- <div id="content-title"></div> -->
+      <input type="text" id="search" placeholder="Type to search">
+      <table id="table" border="3" class='familyclass'></table> 
+      <!-- the rest of the content-->
+    </div>
+  </div>
+
+
 <script src="{{ STATIC_URL }}js/min.js"></script>
 <script type="text/javascript">
 
@@ -37,7 +43,7 @@ function subject(){
       var data=response['data'];
       var str_head = '<th>IP</th><th>FQDN </th><th>ServerName </th><th>ServerOwner </th><th>AppliactionName</th>'
       var str ='';
-      document.getElementById('recordLength').value = data.length;
+      document.getElementById('table').value = data.length;
       for(i=0;i<data.length;i++)
       {
           var IP=data[i]['IP'];
@@ -59,6 +65,18 @@ function subject(){
       },
     });
   }
+    $("#search").keyup(function(){
+        _this = this;
+        // Show only matching TR, hide rest of them
+        $.each($("#table tbody tr"), function() {
+            if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
+               $(this).hide();
+            else
+               $(this).show();                
+        });
+    }); 
+
+
   $( document ).ready(function() {
     console.log( "ready!" );
     subject();

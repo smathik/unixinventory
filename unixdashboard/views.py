@@ -63,11 +63,11 @@ def state(request):
     cursor = connection.cursor ()
     cursor.execute ("select * from mastertable")
     datas = cursor.fetchall ()
-    dataa = [list(i) for i in datas[1:20]]
-    print dataa[1:10]
-    for i in dataa[1:10]:
-        data.append({'IP':i[0],'FQDN':i[1],'ServerName':i[2],'ServerOwner':i[3],'AppliactionName':i[4]})
+    dataa = [list(i) for i in datas]
+    for i in dataa[1:20]:
+        data.append({'IP':i[0],'FQDN':i[1],'ServerName':i[2],'ServerOwner':i[3],'ApplicationName':i[4]})
     # data.encode('utf-8').strip()
+    print data[1:20]
     return HttpResponse(content=json.dumps({'data': data}),content_type='Application/json')
 
 
