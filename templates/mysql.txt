@@ -1,0 +1,75 @@
+Create Table: CREATE TABLE `master` (
+  `ip` varchar(200) NOT NULL DEFAULT '',
+  `fqdn` varchar(200) NOT NULL,
+  `server_name` varchar(200) NOT NULL,
+  `serverowner` varchar(200) NOT NULL,
+  `application_name` varchar(200) NOT NULL,
+  `app_support_conatct` varchar(200) NOT NULL,
+  `console` varchar(200) NOT NULL,
+  `machine_type` varchar(200) NOT NULL,
+  `site_type` varchar(200) NOT NULL,
+  `os_type` varchar(200) NOT NULL,
+  `oslevel` varchar(200) NOT NULL,
+  `bu` varchar(200) NOT NULL,
+  `source` varchar(200) NOT NULL,
+  `decomission` varchar(200) NOT NULL,
+  `date` varchar(100) NOT NULL,
+  `decommission_request` varchar(200) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `environment` varchar(100) NOT NULL,
+  `in_scope_for_patch` varchar(100) NOT NULL,
+  `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIM                                                                                        ESTAMP,
+  PRIMARY KEY (`ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+
+Create Table: CREATE TABLE `master_history` (
+  `ip` varchar(200) DEFAULT NULL,
+  `fqdn` varchar(200) NOT NULL,
+  `server_name` varchar(200) NOT NULL,
+  `serverowner` varchar(200) NOT NULL,
+  `application_name` varchar(200) NOT NULL,
+  `app_support_conatct` varchar(200) NOT NULL,
+  `console` varchar(200) NOT NULL,
+  `machine_type` varchar(200) NOT NULL,
+  `site_type` varchar(200) NOT NULL,
+  `os_type` varchar(200) NOT NULL,
+  `oslevel` varchar(200) NOT NULL,
+  `bu` varchar(200) NOT NULL,
+  `source` varchar(200) NOT NULL,
+  `decomission` varchar(200) NOT NULL,
+  `date` varchar(100) NOT NULL,
+  `decommission_request` varchar(200) NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `user` varchar(100) NOT NULL,
+  `environment` varchar(100) NOT NULL,
+  `in_scope_for_patch` varchar(100) NOT NULL,
+  `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+
+Create Table: CREATE TABLE `pop` (
+  `ip` varchar(100) DEFAULT NULL,
+  `fqdn` varchar(20) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+
+def login_check(request):
+  username = request.POST['username']
+  password = request.POST['password']
+  ldap_server="tus1gdsdirpin04"
+  user_dn = "cn="+username+",ou=Accounts,ou=People,o=GDS"
+  base_dn = "ou=People,o=GDS"
+  connect = ldap.open(ldap_server)
+  search_filter = "cn="+username
+  try:
+    connect.bind_s(user_dn,password)
+    result = connect.search_s(base_dn,ldap.SCOPE_SUBTREE,search_filter)
+    connect.unbind_s()
+    dump = "success"
+    return HttpResponse(content=json.dumps(dump),content_type='Application/json')
+  except ldap.LDAPError:
+    connect.unbind_s()
+    print "authentication error"
+    return render(request,'login.html')

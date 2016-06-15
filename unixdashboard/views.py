@@ -14,38 +14,36 @@ from datetime import date
 def loginpage(request):
   return render(request,'login.html')
 
+# def login_check(request):
+#   username = request.POST['username']
+#   password = request.POST['password']
+#   print username, password
+#   # user = authenticate(username="admin", password="admin")
+#   if username=="admin" and password=="admin":
+#       # login(request, user)
+#       dump = "success"      
+#       return HttpResponse(content=json.dumps(dump),content_type='Application/json')
+#   else:
+#       return render(request,'login.html')
+
 def login_check(request):
   username = request.POST['username']
   password = request.POST['password']
-  print username, password
-  # user = authenticate(username="admin", password="admin")
-  if username=="admin" and password=="admin":
-      # login(request, user)
-      dump = "success"      
-      return HttpResponse(content=json.dumps(dump),content_type='Application/json')
-  else:
-      return render(request,'login.html')
-
-# def login_check(request):
-#   ldap_server="x.x.x.x"
-#   username = "someuser"
-#   password= "somepassword"
-#   # the following is the user_dn format provided by the ldap server
-#   user_dn = "uid="+username+",ou=someou,dc=somedc,dc=local"
-#   # adjust this to your base dn for searching
-#   base_dn = "dc=somedc,dc=local"
-#   connect = ldap.open(ldap_server)
-#   search_filter = "uid="+username
-#   try:
-#     #if authentication successful, get the full user data
-#     connect.bind_s(user_dn,password)
-#     result = connect.search_s(base_dn,ldap.SCOPE_SUBTREE,search_filter)
-#     # return all user data results
-#     connect.unbind_s()
-#     print result
-#   except ldap.LDAPError:
-#     connect.unbind_s()
-#     print "authentication error"
+  ldap_server="tus1gdsdirpin04"
+  user_dn = "cn="+username+",ou=Accounts,ou=People,o=GDS"
+  base_dn = "ou=People,o=GDS"
+  connect = ldap.open(ldap_server)
+  search_filter = "cn="+username
+  try:
+    connect.bind_s(user_dn,password)
+    result = connect.search_s(base_dn,ldap.SCOPE_SUBTREE,search_filter)
+    connect.unbind_s()
+    dump = "success"
+    return HttpResponse(content=json.dumps(dump),content_type='Application/json')
+  except ldap.LDAPError:
+    connect.unbind_s()
+    print "authentication error"
+    return render(request,'login.html')
 
 def logout_view(request):
   logout(request)
@@ -56,6 +54,12 @@ def logout_view(request):
 def home(request):
   return render(request,'home.html')
 
+def addrow(request):
+  if request.method == 'POST':
+        ip = request.POST['ip']
+        fqdn = request.POST['fqdn']
+        print ip, fqdn
+  return render(request,'home.html')
 
 def state(request):
     data = []
@@ -67,7 +71,7 @@ def state(request):
     for i in dataa[1:20]:
         data.append({'IP':i[0],'FQDN':i[1],'ServerName':i[2],'ServerOwner':i[3],'ApplicationName':i[4]})
     # data.encode('utf-8').strip()
-    print data[1:20]
+    # print data[1:20]
     return HttpResponse(content=json.dumps({'data': data}),content_type='Application/json')
 
 
