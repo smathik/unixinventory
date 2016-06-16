@@ -58,8 +58,28 @@ def addrow(request):
   if request.method == 'POST':
         ip = request.POST['ip']
         fqdn = request.POST['fqdn']
-        print ip, fqdn
+        fqdn = request.POST['fqdn']
+        server_name = request.POST['server_name']
+        application_name = request.POST['application_name']
+        app_support_conatct = request.POST['app_support_conatct']
+        console = request.POST['console']
+        machine_type = request.POST['machine_type']
+        os_type = request.POST['os_type']
+        oslevel = request.POST['oslevel']
+        decomission = request.POST['decomission']
+        date = request.POST['date']
+        decommission_request = request.POST['decommission_request']
+        category = request.POST['category']
+        user = request.POST['user']
+        environment = request.POST['environment']
+        in_scope_for_patch = request.POST['in_scope_for_patch']
+        connection = MySQLdb.connect(host="localhost", user="root", passwd="password", db="unixinventory")
+        cursor = connection.cursor ()
+        query = """INSERT INTO mastertable (ip,fqdn,server_name,application_name,app_support_conatct,console,machine_type,os_type,oslevel,decomission,date,decommission_request,category,user,environment,in_scope_for_patch) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s)"""
+        values = (ip,fqdn,server_name,application_name,app_support_conatct,console,machine_type,os_type,oslevel,decomission,date,decommission_request,category,user,environment,in_scope_for_patch)
+        cursor.execute(query, values)
   return render(request,'home.html')
+
 
 def state(request):
     data = []

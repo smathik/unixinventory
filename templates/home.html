@@ -19,7 +19,7 @@
     <div id="contact" class="pri-nav"><div><a href="contact">contact</a></div></div>
   </div> -->
 
-<input type="button" value="Add Row" onclick="dispTblContents(ip,fqdn,server_name,application_name,app_support_conatct,console,machine_type,os_type,oslevel,decomission);" />
+<input type="button" value="Add Row" onclick="dispTblContents(ip,fqdn,server_name,application_name,app_support_conatct,console,machine_type,os_type,oslevel,decomission,date,decommission_request,category,user,environment,in_scope_for_patch);" />
 <table id="dataTable"  border="1">
     <thead>
         <tr>
@@ -67,7 +67,7 @@
   <div class="container">
     <div class="content">
       <!-- <div id="content-title"></div> -->
-      <input type="text" id="search" placeholder="Type to search">
+      <h2>Type to search:<input type="text" id="search"></h2>
       <table id="table" border="3" class='familyclass'></table> 
       <!-- the rest of the content-->
     </div>
@@ -121,6 +121,7 @@ function dispTblContents(ip,fqdn,server_name,application_name,app_support_conatc
  var os_type = document.getElementById("os_type").value;
  var oslevel = document.getElementById("oslevel").value;
  var decomission = document.getElementById("decomission").value;
+
         $.ajax({
                type: "POST",
                url: '/addrow/',
