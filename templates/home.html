@@ -1,156 +1,184 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE html>
+<html>
 <head>
-<title>Unixinventory</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+<link rel="stylesheet"
+  href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet"
+  href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<script
+  src="https://ajax.googleapis.com/ajax/libs/jquery/1.14.4/jquery.min.js"></script>
+<script
+  src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<link rel="stylesheet" href="{{STATIC_URL}}css/home.css"> 
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js" ></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-bp.js" ></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/navigation.js" ></script>
+<script type="text/javascript"
+  src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<link rel="stylesheet"
+  href="https://formden.com/static/cdn/bootstrap-iso.css" />
+<script src="//code.jquery.com/jquery-1.12.3.js"></script>
+<script
+  src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script
+  src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
+<script>
+  function myFunction() {
+    var divitem = document.getElementById("Row_Table");
+    divitem.style.display = 'none';
+    //var divitem1 = document.getElementById("Mod_Table");
+  //  divitem1.style.display = 'none';
+    
+  }
+  function getTable() {
+    $("#Row_Table").show();
+  }
+  
+  function modifyTable(){
+    document.getElementById('table').contentEditable='true';
+  }
+  
+  $(document).ready(function() {
+    $("#userForm").submit(function() {
+       $("#Row_Table").hide();
+       $('#someHiddenDiv').show();
+
+      ip = $(this).find("#IP").val();
+      fqdn = $(this).find("#FQDN").val();
+      server_name = $(this).find("#SERVER_NAME").val();
+      serverowner = $(this).find("#SERVER_OWNER").val();
+      application_name = $(this).find("#APPLICATION_NAME").val();
+      app_support_conatct = $(this).find("#APP_SUPPORT_CONTACT").val();
+      console = $(this).find("#CONSOLE").val();
+      machine_type = $(this).find("#MACHINE_TYPE").val();
+      os_type = $(this).find("#OS_TYPE").val();
+      oslevel = $(this).find("#OS_LEVEL").val();
+      decomission = $(this).find("#DECOMMISSION").val();
+      date = $(this).find("#DATE").val();
+      decommission_request = $(this).find("#DECOMMISSION_REQUEST").val();
+      user = $(this).find("#USER").val();
+      environment = $(this).find("#ENVIRONMENT").val();
+      in_scope_for_patch = $(this).find("#INSCOPE_FOR_PATCH").val();
+
+      var data = {
+        "ip" : ip,
+        "fqdn" : fqdn,
+        "server_name" : server_name,
+        "serverowner" : serverowner,
+        "application_name" : application_name,
+        "app_support_conatct" : app_support_conatct,
+        "console" : console,
+        "machine_type" : machine_type,
+        "os_type" : os_type,
+        "oslevel" : oslevel,
+        "decomission" : decomission,
+        "date" : date,
+        "decommission_request" : decommission_request,
+        "user" : user,
+        "environment" : environment,
+        "in_scope_for_patch" : in_scope_for_patch
+
+      };
+      alert(JSON.stringify(data));
+      $.ajax({
+        type : 'post',
+        url : '/addrow/',
+        dataType : 'text',
+          data : data,
+        success : function(result) {
+          console.log('Done');
+          $('#someHiddenDiv').show();
+
+        },
+        
+        failure : function(result) {
+          console.log('Something went missing');
+
+        }
+      });
+      return false;
+    });
+  });
+  
+
+      function subject() {
+        $.ajax({
+              type : 'POST',
+              url : '/state/',
+              dataType : 'text',
+              data : {
+                csrfmiddlewaretoken : '{{csrf_token}}',
+              },
+              success : function(data) {
+                $('#table').dataTable({
+                  data : data,
+                  'sort': false,
+                  columns:[
+                           { 'data':'ip'},
+                           {'data':'fqdn'},
+                           {'data':'server_name'},
+                           {'data': 'serverowner'},
+                           {'data':'application_name'},
+                           {'data':'app_support_conatct'},
+                           {'data':'console'},
+                           {'data':'machine_type'},
+                           {'data':'site_type'},
+                           ]
+                });
+                },
+              )};
+      }
+                            
+      
+  $(document).one('ready', function () {
+  console.log("ready!");
+          subject();
+      });
+
+</script>
+
+
 </head>
-<body>
-  <!-- <div id="header"></div> -->
-<!--   <div id="navigation" class="container">
-    <div id="home" class="pri-nav active"><div><a href="home">home</a></div></div>
-    <div id="about" class="pri-nav"><div><a href="about">about</a></div></div>
-    <div id="services" class="pri-nav"><div><a href="services">services</a></div></div>
-    <div id="solutions" class="pri-nav"><div><a href="solutions">solutions</a></div></div>
-    <div id="contact" class="pri-nav"><div><a href="contact">contact</a></div></div>
-  </div> -->
+<body onload="myFunction()">
 
-<input type="button" value="Add Row" onclick="dispTblContents(ip,fqdn,server_name,application_name,app_support_conatct,console,machine_type,os_type,oslevel,decomission,date,decommission_request,category,user,environment,in_scope_for_patch);" />
-<table id="dataTable"  border="1">
-    <thead>
-        <tr>
-            <th>ip</th>
-            <th>fqdn</th>
-            <th>server_name</th>
-            <th>serverowner</th>
-            <th>application_name</th>
-            <th>app_support_conatct</th>
-            <th>console</th>
-            <th>machine_type</th>
-            <th>os_type</th>
-            <th>oslevel</th>
-            <th>decomission</th>
-            <th>date</th>
-            <th>decommission_request</th>
-            <th>category</th>
-            <th>user</th>
-            <th>environment</th>
-            <th>in_scope_for_patch</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <TD><INPUT type="text" id="ip"/></TD>
-            <TD><INPUT type="text" id="fqdn"/></TD>
-            <TD><INPUT type="text" id="server_name"/></TD>
-            <TD><INPUT type="text" id="serverowner"/></TD>
-            <TD><INPUT type="text" id="application_name"/></TD>
-            <TD><INPUT type="text" id="app_support_conatct"/></TD>
-            <TD><INPUT type="text" id="console"/></TD>
-            <TD><INPUT type="text" id="machine_type"/></TD>
-            <TD><INPUT type="text" id="os_type"/></TD>
-            <TD><INPUT type="text" id="oslevel"/></TD>
-            <TD><INPUT type="text" id="decomission"/></TD>
-            <TD><INPUT type="text" id="date"/></TD>
-            <TD><INPUT type="text" id="decommission_request"/></TD>
-            <TD><INPUT type="text" id="category"/></TD>
-            <TD><INPUT type="text" id="user"/></TD>
-            <TD><INPUT type="text" id="environment"/></TD>
-            <TD><INPUT type="text" id="in_scope_for_patch"/></TD>
-        </tr>
-    </tbody>
-</table>
-  <div class="container">
-    <div class="content">
-      <!-- <div id="content-title"></div> -->
-      <h2>Type to search:<input type="text" id="search"></h2>
-      <table id="table" border="3" class='familyclass'></table> 
-      <!-- the rest of the content-->
+
+  <div class="container-fluid" style="background: orange;">
+    <br> <br>
+    <div class="text-right">
+      <button type="button" onclick="getTable()" class="btn btn-info ">Add
+        Row</button>
+      <button type="button" class="btn btn-info" onclick="modifyTable()">Modify
+        Table</button>
+      <h4></h4>
+      <h4></h4>
+      <div class="row">
+        <div class="col-md-14">
+
+          <div id="Row_Table">
+            <form class="form-horizontal" id="userForm">
+              <div class="form-group">
+
+    <div class="table-responsive">
+      <br> <br>
+      <div id="mod_Table">
+      <table class="table table-bordered table-hover table-active"
+        id="table" cellspacing="0" width="100%>
+        <thead>
+            <tr>
+            <th>IP</th>
+            <th>FQDN</th>
+              <th>Server Name</th>
+              <th>Server Owner</th>
+              <th>Application Name</th>
+              <th>App Support Conatct</th>
+              <th>Console</th>
+              <th>Machine Type</th>
+              <th>Site Type</th>
+            </tr>
+          </thead>
+      </table>
+      </div>
     </div>
   </div>
-<script src="{{ STATIC_URL }}js/min.js"></script>
-<script type="text/javascript">
-
-function subject(){
-  // alert('a')
-  $.ajax({
-      type:'POST',
-      url:'/state/',
-      data:{
-        csrfmiddlewaretoken: '{{csrf_token}}',
-      },
-    success : function(response){
-      var data=response['data'];
-      var str_head = '<th>IP</th><th>FQDN </th><th>ServerName </th><th>ServerOwner </th><th>AppliactionName</th>'
-      var str ='';
-      document.getElementById('table').value = data.length;
-      for(i=0;i<data.length;i++)
-      {
-          var IP=data[i]['IP'];
-          var FQDN=data[i]['FQDN'];
-          var ServerName=data[i]['ServerName'];
-          var ServerOwner=data[i]['ServerOwner'];
-          var AppliactionName=data[i]['AppliactionName'];
-          // var SupportGroupDL  =data[i]['SupportGroupDL'];
-          // var Console=data[i]['Console'];
-          // var MachineType=data[i]['MachineType'];
-          // var SiteType=data[i]['SiteType'];
-            
-          str += '<tr><td>'+IP+'</td><td>'+FQDN+'</td><td>'+ServerName+'</td><td>'+ServerOwner+'</td><td>'+AppliactionName+'</td></tr>';
-            
-        }
-            var html = '<table><tr>'+str_head +'</tr>'+str+'</table>';
-            $('.familyclass').append(html)
-            
-      },
-    });
-  }
-function dispTblContents(ip,fqdn,server_name,application_name,app_support_conatct,console,machine_type,os_type,oslevel,decomission) {
- var ip = document.getElementById("ip").value;
- var fqdn = document.getElementById("fqdn").value;
- var server_name = document.getElementById("server_name").value;
- var serverowner = document.getElementById("serverowner").value;
- var application_name = document.getElementById("application_name").value;
- var app_support_conatct = document.getElementById("app_support_conatct").value;
- var console = document.getElementById("console").value;
- var machine_type = document.getElementById("machine_type").value;
- var os_type = document.getElementById("os_type").value;
- var oslevel = document.getElementById("oslevel").value;
- var decomission = document.getElementById("decomission").value;
-
-        $.ajax({
-               type: "POST",
-               url: '/addrow/',
-               data: {
-                     ip:ip,
-                     fqdn: fqdn,
-                     csrfmiddlewaretoken: '{{csrf_token}}',
-                      },
-                success: function (response) {
-                    console.log('success')}
-
-});
-}
-    $("#search").keyup(function(){
-        _this = this;
-        // Show only matching TR, hide rest of them
-        $.each($("#table tbody tr"), function() {
-            if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1)
-               $(this).hide();
-            else
-               $(this).show();                
-        });
-    }); 
-
-
-  $( document ).ready(function() {
-    console.log( "ready!" );
-    subject();
-});
-  </script>
 </body>
 </html>

@@ -1,4 +1,6 @@
-Create Table: CREATE TABLE `master` (
+UPDATE smathik SET Password=PASSWORD('passw0rd') WHERE User='root'; FLUSH PRIVILEGES; exit;
+
+  CREATE TABLE `master` (
   `ip` varchar(200) NOT NULL DEFAULT '',
   `fqdn` varchar(200) NOT NULL,
   `server_name` varchar(200) NOT NULL,
@@ -19,12 +21,13 @@ Create Table: CREATE TABLE `master` (
   `user` varchar(100) NOT NULL,
   `environment` varchar(100) NOT NULL,
   `in_scope_for_patch` varchar(100) NOT NULL,
-  `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIM                                                                                        ESTAMP,
-  PRIMARY KEY (`ip`)
+  `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ip`) );
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1
 
+ALTER TABLE master DROP PRIMARY KEY;
 
-Create Table: CREATE TABLE `master_history` (
+CREATE TABLE `master_history` (
   `ip` varchar(200) DEFAULT NULL,
   `fqdn` varchar(200) NOT NULL,
   `server_name` varchar(200) NOT NULL,
@@ -46,7 +49,7 @@ Create Table: CREATE TABLE `master_history` (
   `environment` varchar(100) NOT NULL,
   `in_scope_for_patch` varchar(100) NOT NULL,
   `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
+) ;
 
 
 Create Table: CREATE TABLE `pop` (
@@ -73,3 +76,119 @@ def login_check(request):
     connect.unbind_s()
     print "authentication error"
     return render(request,'login.html')
+
+
+DELIMITER $$
+
+DROP TRIGGER update_data $$
+
+CREATE TRIGGER update_data after UPDATE on master
+FOR EACH ROW
+BEGIN
+    IF (NEW.serverowner != OLD.serverowner)
+       or ( NEW.fqdn != OLD.fqdn)
+       or ( NEW.server_name != OLD.server_name)
+      or ( NEW.application_name != OLD.application_name)
+or ( NEW.app_support_conatct != OLD.app_support_conatct)
+or ( NEW.console != OLD.console)
+or ( NEW.site_type != OLD.site_type)
+or ( NEW.os_type != OLD.os_type)
+or ( NEW.oslevel != OLD.oslevel)
+or ( NEW.bu != OLD.bu)
+or ( NEW.source != OLD.source)
+or ( NEW.decomission != OLD.decomission)
+or ( NEW.date != OLD.date)
+or ( NEW.decommission_request != OLD.decommission_request)
+or ( NEW.category != OLD.category)
+or ( NEW.environment != OLD.environment)
+or ( NEW.in_scope_for_patch != OLD.in_scope_for_patch)
+or ( NEW.change_at != OLD.change_at)
+or ( NEW.ip != OLD.ip)
+
+
+
+ THEN
+        INSERT INTO master_history
+            (serverowner,fqdn )
+        VALUES
+            (old.serverowner,old.fqdn ,OLD.server_name,OLD.application_name ,OLD.app_support_conatct,OLD.console, OLD.site_type,OLD.os_type,OLD.oslevel,OLD.bu,OLD.source,OLD.decomission,OLD.date ,OLD.decommission_request,OLD.category,OLD.environment,OLD.in_scope_for_patch,OLD.change_at,OLD.ip   );
+    END IF;
+
+END$$
+
+DELIMITER ;
+
+
+import xlrd
+import MySQLdb
+book = xlrd.open_workbook("//media/smathik/Files/Cognizant/pytest.xlsx")
+sheet = book.sheet_by_name("Sheet1")
+database = MySQLdb.connect(host="localhost", user="root", passwd="password", db="unixinventory")
+cursor = database.cursor()
+query = """INSERT INTO master (ip, fqdn, server_name, serverowner, application_name, app_support_conatct, console, machine_type, site_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+for r in range(1, sheet.nrows):
+      ip      = sheet.cell(r,0).value
+      fqdn = sheet.cell(r,1).value
+      server_name          = sheet.cell(r,2).value
+      serverowner     = sheet.cell(r,3).value
+      application_name       = sheet.cell(r,4).value
+      app_support_conatct = sheet.cell(r,5).value
+      console        = sheet.cell(r,6).value
+      machine_type       = sheet.cell(r,7).value
+      site_type     = sheet.cell(r,8).value
+      values = (ip, fqdn, server_name, serverowner, application_name, app_support_conatct, console, machine_type, site_type)
+      print values
+      cursor.execute(query, values)
+
+# cursor.close()
+# database.commit()
+# database.close()
+
+
+
+=======================================================================================================================
+
+
+
+
+
+
+CREATE TABLE master ( ip varchar(200) ,
+
+                                                                                   fqdn varchar(200) not null,
+
+                                                                                   server_name varchar(200) not null,
+
+                                                                                   serverowner varchar(200) not null,
+
+                                                                                   application_name varchar(200) not null,
+
+                                                                                   app_support_conatct varchar(200) not null,
+
+                                                                                   console varchar(200) not null,
+
+                                                                                   machine_type varchar(200) not null,
+
+                                                                                  site_type varchar(200) not null,
+
+                                                                                   os_type varchar(200) not null,
+
+                                                                                   oslevel varchar(200) not null,
+
+                                                                                   bu varchar(200) not null,
+
+                                                                                   source varchar(200) not null,
+
+                                                                                   decomission varchar(200) not null,
+
+                                                                                   date varchar(100) not null,
+
+                                                                                   decommission_request varchar(200) not null,
+
+                                                                                   category varchar(100) not null,
+
+                                                                                   environment varchar(100) not null,
+
+                                                                                   in_scope_for_patch varchar(100) not null,
+
+                                                                                   change_at  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  );
