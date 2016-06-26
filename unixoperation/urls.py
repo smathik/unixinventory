@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^edit/', edit),
     url(r'^state/', state),
     url(r'^addrow/', addrow),
+    url(r'^modifyrow/', modifyrow),
     url(r'^admin/', include(admin.site.urls)),
 
 ) 

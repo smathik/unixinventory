@@ -1,86 +1,15 @@
-UPDATE smathik SET Password=PASSWORD('passw0rd') WHERE User='root'; FLUSH PRIVILEGES; exit;
-
-  CREATE TABLE `master` (
-  `ip` varchar(200) NOT NULL DEFAULT '',
-  `fqdn` varchar(200) NOT NULL,
-  `server_name` varchar(200) NOT NULL,
-  `serverowner` varchar(200) NOT NULL,
-  `application_name` varchar(200) NOT NULL,
-  `app_support_conatct` varchar(200) NOT NULL,
-  `console` varchar(200) NOT NULL,
-  `machine_type` varchar(200) NOT NULL,
-  `site_type` varchar(200) NOT NULL,
-  `os_type` varchar(200) NOT NULL,
-  `oslevel` varchar(200) NOT NULL,
-  `bu` varchar(200) NOT NULL,
-  `source` varchar(200) NOT NULL,
-  `decomission` varchar(200) NOT NULL,
-  `date` varchar(100) NOT NULL,
-  `decommission_request` varchar(200) NOT NULL,
-  `category` varchar(100) NOT NULL,
-  `user` varchar(100) NOT NULL,
-  `environment` varchar(100) NOT NULL,
-  `in_scope_for_patch` varchar(100) NOT NULL,
-  `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`ip`) );
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
-
-ALTER TABLE master DROP PRIMARY KEY;
-
-CREATE TABLE `master_history` (
-  `ip` varchar(200) DEFAULT NULL,
-  `fqdn` varchar(200) NOT NULL,
-  `server_name` varchar(200) NOT NULL,
-  `serverowner` varchar(200) NOT NULL,
-  `application_name` varchar(200) NOT NULL,
-  `app_support_conatct` varchar(200) NOT NULL,
-  `console` varchar(200) NOT NULL,
-  `machine_type` varchar(200) NOT NULL,
-  `site_type` varchar(200) NOT NULL,
-  `os_type` varchar(200) NOT NULL,
-  `oslevel` varchar(200) NOT NULL,
-  `bu` varchar(200) NOT NULL,
-  `source` varchar(200) NOT NULL,
-  `decomission` varchar(200) NOT NULL,
-  `date` varchar(100) NOT NULL,
-  `decommission_request` varchar(200) NOT NULL,
-  `category` varchar(100) NOT NULL,
-  `user` varchar(100) NOT NULL,
-  `environment` varchar(100) NOT NULL,
-  `in_scope_for_patch` varchar(100) NOT NULL,
-  `change_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ;
+CREATE TABLE master ( ip varchar(200), fqdn varchar(200) ,server_name varchar(200) not null ,serverowner varchar(200) ,application_name varchar(200),app_support_contact varchar(200),console varchar(200), machine_type varchar(200),site_type varchar(200),os_type varchar(200),oslevel varchar(200),bu varchar(200),source varchar(200), decomission varchar(200),date varchar(100),decomission_request varchar(200),category varchar(100),environment varchar(100),in_scope_for_patch varchar(100),change_at  timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,PRIMARY KEY (ip));
 
 
-Create Table: CREATE TABLE `pop` (
-  `ip` varchar(100) DEFAULT NULL,
-  `fqdn` varchar(20) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
+CREATE table MASTER_HISTORY
 
 
-def login_check(request):
-  username = request.POST['username']
-  password = request.POST['password']
-  ldap_server="tus1gdsdirpin04"
-  user_dn = "cn="+username+",ou=Accounts,ou=People,o=GDS"
-  base_dn = "ou=People,o=GDS"
-  connect = ldap.open(ldap_server)
-  search_filter = "cn="+username
-  try:
-    connect.bind_s(user_dn,password)
-    result = connect.search_s(base_dn,ldap.SCOPE_SUBTREE,search_filter)
-    connect.unbind_s()
-    dump = "success"
-    return HttpResponse(content=json.dumps(dump),content_type='Application/json')
-  except ldap.LDAPError:
-    connect.unbind_s()
-    print "authentication error"
-    return render(request,'login.html')
+CREATE TABLE master_history ( ip varchar(200), fqdn varchar(200) ,server_name varchar(200) not null ,serverowner varchar(200) ,application_name varchar(200),app_support_contact varchar(200),console varchar(200), machine_type varchar(200),site_type varchar(200),os_type varchar(200),oslevel varchar(200),bu varchar(200),source varchar(200), decomission varchar(200),date varchar(100),decomission_request varchar(200),category varchar(100),environment varchar(100),in_scope_for_patch varchar(100),change_at  timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);
 
 
-DELIMITER $$
 
-DROP TRIGGER update_data $$
+
+DELIMITER ///
 
 CREATE TRIGGER update_data after UPDATE on master
 FOR EACH ROW
@@ -89,7 +18,7 @@ BEGIN
        or ( NEW.fqdn != OLD.fqdn)
        or ( NEW.server_name != OLD.server_name)
       or ( NEW.application_name != OLD.application_name)
-or ( NEW.app_support_conatct != OLD.app_support_conatct)
+or ( NEW.app_support_contact != OLD.app_support_contact)
 or ( NEW.console != OLD.console)
 or ( NEW.site_type != OLD.site_type)
 or ( NEW.os_type != OLD.os_type)
@@ -98,97 +27,53 @@ or ( NEW.bu != OLD.bu)
 or ( NEW.source != OLD.source)
 or ( NEW.decomission != OLD.decomission)
 or ( NEW.date != OLD.date)
-or ( NEW.decommission_request != OLD.decommission_request)
+or ( NEW.decomission_request != OLD.decomission_request)
 or ( NEW.category != OLD.category)
 or ( NEW.environment != OLD.environment)
 or ( NEW.in_scope_for_patch != OLD.in_scope_for_patch)
 or ( NEW.change_at != OLD.change_at)
 or ( NEW.ip != OLD.ip)
-
+or ( NEW.machine_type != OLD.machine_type)
 
 
  THEN
-        INSERT INTO master_history
-            (serverowner,fqdn )
-        VALUES
-            (old.serverowner,old.fqdn ,OLD.server_name,OLD.application_name ,OLD.app_support_conatct,OLD.console, OLD.site_type,OLD.os_type,OLD.oslevel,OLD.bu,OLD.source,OLD.decomission,OLD.date ,OLD.decommission_request,OLD.category,OLD.environment,OLD.in_scope_for_patch,OLD.change_at,OLD.ip   );
+        INSERT INTO master_history(serverowner,fqdn,server_name,application_name,app_support_contact,console,site_type,os_type,oslevel,bu,source,decomission,date,decomission_request,category,environment,in_scope_for_patch,change_at,ip,machine_type)VALUES(OLD.serverowner,OLD.fqdn,OLD.server_name,OLD.application_name ,OLD.app_support_contact,OLD.console, OLD.site_type,OLD.os_type,OLD.oslevel,OLD.bu,OLD.source,OLD.decomission,OLD.date ,OLD.decomission_request,OLD.category,OLD.environment,OLD.in_scope_for_patch,OLD.change_at,OLD.ip,OLD.machine_type);
     END IF;
 
-END$$
+END;
+
+///
 
 DELIMITER ;
 
 
+
 import xlrd
 import MySQLdb
-book = xlrd.open_workbook("//media/smathik/Files/Cognizant/pytest.xlsx")
+book = xlrd.open_workbook("/media/smathik/Files/Cognizant/pytest.xlsx")
 sheet = book.sheet_by_name("Sheet1")
 database = MySQLdb.connect(host="localhost", user="root", passwd="password", db="unixinventory")
 cursor = database.cursor()
-query = """INSERT INTO master (ip, fqdn, server_name, serverowner, application_name, app_support_conatct, console, machine_type, site_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+query = """INSERT INTO master (ip, fqdn, server_name, serverowner, application_name, app_support_contact, console, machine_type, site_type) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 for r in range(1, sheet.nrows):
-      ip      = sheet.cell(r,0).value
-      fqdn = sheet.cell(r,1).value
-      server_name          = sheet.cell(r,2).value
-      serverowner     = sheet.cell(r,3).value
-      application_name       = sheet.cell(r,4).value
-      app_support_conatct = sheet.cell(r,5).value
-      console        = sheet.cell(r,6).value
-      machine_type       = sheet.cell(r,7).value
-      site_type     = sheet.cell(r,8).value
-      values = (ip, fqdn, server_name, serverowner, application_name, app_support_conatct, console, machine_type, site_type)
+    try:
+      ip      = str(sheet.cell(r,0).value)
+      fqdn = str(sheet.cell(r,1).value)
+      server_name          = str(sheet.cell(r,2).value)
+      serverowner     = str(sheet.cell(r,3).value)
+      application_name       = str(sheet.cell(r,4).value)
+      app_support_contact = str(sheet.cell(r,5).value)
+      console        = str(sheet.cell(r,6).value)
+      machine_type       = str(sheet.cell(r,7).value)
+      site_type     = str(sheet.cell(r,8).value)
+      values = (ip, fqdn, server_name, serverowner, application_name, app_support_contact, console, machine_type, site_type)
       print values
       cursor.execute(query, values)
+    except:
+      ip      = str(sheet.cell(r,0).value)
+      print "failed>>",ip
+      continue      
 
-# cursor.close()
-# database.commit()
-# database.close()
-
-
-
-=======================================================================================================================
-
-
-
-
-
-
-CREATE TABLE master ( ip varchar(200) ,
-
-                                                                                   fqdn varchar(200) not null,
-
-                                                                                   server_name varchar(200) not null,
-
-                                                                                   serverowner varchar(200) not null,
-
-                                                                                   application_name varchar(200) not null,
-
-                                                                                   app_support_conatct varchar(200) not null,
-
-                                                                                   console varchar(200) not null,
-
-                                                                                   machine_type varchar(200) not null,
-
-                                                                                  site_type varchar(200) not null,
-
-                                                                                   os_type varchar(200) not null,
-
-                                                                                   oslevel varchar(200) not null,
-
-                                                                                   bu varchar(200) not null,
-
-                                                                                   source varchar(200) not null,
-
-                                                                                   decomission varchar(200) not null,
-
-                                                                                   date varchar(100) not null,
-
-                                                                                   decommission_request varchar(200) not null,
-
-                                                                                   category varchar(100) not null,
-
-                                                                                   environment varchar(100) not null,
-
-                                                                                   in_scope_for_patch varchar(100) not null,
-
-                                                                                   change_at  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP  );
+cursor.close()
+database.commit()
+database.close()
