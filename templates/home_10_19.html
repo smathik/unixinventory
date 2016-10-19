@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{{ STATIC_URL}}css/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="{{ STATIC_URL}}css/jqx.classic.css" type="text/css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jqx-all.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jqxvalidator.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jqxcore.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jqxinput.js"></script> 
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jqxbuttons.js"></script> 
+    <script type="text/javascript" src="{{ STATIC_URL}}js/jqxcheckbox.js"></script> 
+<style>
+#myProgress {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  background-color: #ddd;
+}
+
+#myBar {
+  position: absolute;
+  width: 5%;
+  height: 100%;
+  background-color: #4CAF50;
+}
+
+#label {
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+#pg_ld{display:none;}
+</style>
+
+
+    <script type="text/javascript">
+
+        $(function() {
+  var elem = document.getElementById("myBar");
+  var width = 10;
+  var id = setInterval(frame, 120);
+  function frame() {
+    if (width >= 100) {
+      clearInterval(id);
+       document.getElementById("pg_ld").style.display = "block";
+      document.getElementById("myProgress").style.display = "none";
+    } else {
+      width++;
+     // elem.style.width = width ;
+      document.getElementById("label").innerHTML = width * 1  + '%';
+    }
+  }
+});
+
+
+
+    function myFunction() {
+        var divitem = document.getElementById("AddWindow");
+        divitem.style.display = 'none';
+        var divitem1 = document.getElementById("popupWindow");
+        divitem1.style.display='none';
+        var divitem2 = document.getElementById("ReplaceWindow");
+        divitem2.style.display = 'none';
+        }
+        $(document).ready(function() {
+            $.ajax({
+                type: "POST",
+                url: "/state/",
+                success: function(response) {
+                    var data = response['data'];
+                    console.log(data)
+                    var theme = 'classic';
+                    var gridData = data;
+                    var gridSource = {
+                        localdata: gridData,
+                        addrow: function(rowid, rowdata, position, commit) {
+                            var data = $.param(rowdata);
+                            $.ajax({
+                                type: "POST",
+                                url: '/addrow/',
+                                data: data,
+                                success: function(rowdata, status, xhr) {
+                                    commit(true);
+                                }
+                            });
+                        },
+
+                        updaterow: function(rowid, rowdata, commit) {
+                            var data = $.param(rowdata);
+                            $.ajax({
+                                type: "POST",
+                                url: '/modifyrow/',
+                                data: data,
+                                success: function(rowdata, status, xhr) {
+                                    commit(true);
+                                }
+                            });
+
+
+                        },
+
+                                    /*gridsrc*/
+                    };
+                    $("#fqdn").jqxInput({
+                        theme: theme
+                    });
+                    $("#server_name").jqxInput({
+                        theme: theme
+                    });
+                    $("#serverowner").jqxInput({
+                        theme: theme
+                    });
+                    $("#application_name").jqxInput({
+                        theme: theme
+                    });
+                    $("#app_support_contact").jqxInput({
+                        theme: theme
+                    });
+                    $("#console").jqxInput({
+                        theme: theme
+                    });
+                    $("#machine_type").jqxInput({
+                        theme: theme
+                    });
+                    $("#site_type").jqxInput({
+                        theme: theme
+                    });
+                    $("#os_type").jqxInput({
+                        theme: theme
+                    });
+                    $("#oslevel").jqxInput({
+                        theme: theme
+                    });
+                    $("#bu").jqxInput({
+                        theme: theme
+                    });
+                    $("#source").jqxInput({
+                        theme: theme
+                    });
+                    $("#decomission").jqxInput({
+                        theme: theme
+                    });
+                    $("#decomission_request").jqxInput({
+                        theme: theme
+                    });
+                    $("#category").jqxInput({
+                        theme: theme
+                    });
+                    $("#environment").jqxInput({
+                        theme: theme
+                    });
+                    $("#in_scope_for_patch").jqxInput({
+                        theme: theme
+                    });
+
+
+                    $("#ip").width(150);
+                    $("#ip").height(23);
+                    $("#fqdn").width(150);
+                    $("#fqdn").height(23);
+                    $("#server_name").width(150);
+                    $("#server_name").height(23);
+                    $("#serverowner").width(150);
+                    $("#serverowner").height(23);
+                    $("#application_name").width(150);
+                    $("#application_name").height(23);
+                    $("#app_support_contact").width(150);
+                    $("#app_support_contact").height(23);
+                    $("#console").width(150);
+                    $("#console").height(23);
+                    $("#machine_type").width(150);
+                    $("#machine_type").height(23);
+                    $("#site_type").width(150);
+                    $("#site_type").height(23);
+                    $("#os_type").width(150);
+                    $("#os_type").height(23);
+                    $("#oslevel").width(150);
+                    $("#oslevel").height(23);
+                    $("#bu").width(150);
+                    $("#bu").height(23);
+                    $("#source").width(150);
+                    $("#source").height(23);
+                    $("#decomission").width(150);
+                    $("#decomission").height(23);
+                    $("#decomission_request").width(150);
+                    $("#decomission_request").height(23);
+                    $("#category").width(150);
+                    $("#category").height(23);
+                    $("#environment").width(150);
+                    $("#environment").height(23);
+                    $("#in_scope_for_patch").width(150);
+                    $("#in_scope_for_patch").height(23);
+                    $("#updated_by").width(150);
+                    $("#updated_by").height(23);
+                    $("#last_patched").width(150);
+                    $("#last_patched").height(23);
+                    $("#change_at").width(150);
+                    $("#change_at").height(23);
+
+                    var cellbeginedit = function (row, datafield, columntype, value) {
+                         if( value == "decommission"){
+                            // var rows = $('#jqxgrid').jqxGrid('getrows');
+                            // var rowid = $("#jqxgrid").jqxGrid('getrowid','');
+                            // console.log(JSON.Stringify(rows))
+
+                        // if(row == 0||row ==1)
+
+                    return false;
+                         }
+                     }
+
+                        var cellsrenderer = function (row, column, value, defaultHtml) {
+                if ( value == "decommission" ) {
+                    var element = $(defaultHtml);
+                    element.css('color', '#da5959');
+                    return element[0].outerHTML;
+                }
+
+                return defaultHtml;
+            }
+
+
+                    var gridDataAdapter = new $.jqx.dataAdapter(gridSource);
+                    var editrow = -1;
+
+                    $("#jqxgrid").jqxGrid({
+                        width: 1330,
+                        theme: theme,
+                        source: gridDataAdapter,
+                        editable: true,
+                        pageable: true,
+                        pagesizeoptions: ['100', '500', '10000'],
+                        // pagesizeoptions: ['00', '1000', '2000', '3000','4000','5000','6000'],
+                        pagesize: 100,
+                        autoheight: true,
+                        filterable: true,
+                        sortable: true,
+                        editMode: 'click',
+                        selectionmode: 'singlecell',
+                        showtoolbar: true,
+                        rendertoolbar: function(toolbar) {
+                            var me = this;
+                            var container = $("<div style='margin: 5px;'></div>");
+                            toolbar.append(container);
+                            container.append('<input id="addrowbutton" type="button" value="Add New Row" />');
+                            container.append('<input id="findreplacebutton" type="button" value="Find & Replace" />');
+                            container.append('<input id="customfiltering" type="button" value="Custom Column Filtering" />');
+                            var span = $("<span style='float: left; margin-top: 5px; margin-right: 4px;'>Search: </span>");
+                 var input = $("<input class='jqx-input jqx-widget-content jqx-rc-all' id='inputsearch' type='text' style='height: 23px; float: left; width:223px;' />");
+
+                            container.append(span);
+                            container.append(input);
+
+                            $("#addrowbutton").jqxButton();
+                            $("#addrowbutton").click(function(event) {
+                                $("#AddWindow").jqxWindow('show');
+                            });
+
+                             $("#findreplacebutton").jqxButton();
+                            $("#findreplacebutton").click(function(event) {
+                                $("#ReplaceWindow").jqxWindow('show');
+                            });
+
+                             $("#customfiltering").jqxButton();
+                            $("#customfiltering").click(function(event) {
+                                $("#customfilteringcolumn").jqxWindow('show');
+                            });
+
+                            $('#inputsearch').keyup(function(e) {
+                                if (e.keyCode == 13) {
+                                    var searchText = $("#inputsearch").val();
+                                    setGlobalFilter(searchText)
+                                }
+                                if ($('#inputsearch').val() == "") {
+                                    $("#jqxgrid").jqxGrid('clearfilters');
+                                }
+                            });
+                        },
+
+                        columns: [{
+                                    text: 'IP',
+                                    datafield: 'ip',
+                                    editable: false,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                               }, {
+
+                                    text: 'FQDN',
+                                    datafield: 'fqdn',
+                                    cellbeginedit: cellbeginedit,
+                                cellsrenderer: cellsrenderer,
+                                    width: 160
+                                },{
+                                    text: 'Decomission',
+                                    datafield: 'decomission',
+                                    cellbeginedit: cellbeginedit,
+                                    cellsrenderer :cellsrenderer,
+                                      width: 160
+
+                                }, {
+                                    text: 'Server Name',
+                                    datafield: 'server_name',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Server Owner',
+                                    datafield: 'serverowner',
+cellbeginedit: cellbeginedit,
+ cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Application Name',
+                                    datafield: 'application_name',
+                                cellbeginedit: cellbeginedit,
+ cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'App Support Contact',
+                                    datafield: 'app_support_contact',
+                                        cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    minwidth: 160
+                                }, {
+                                    text: 'Console',
+                                    datafield: 'console',
+                                        cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Machine Type',
+                                    datafield: 'machine_type',
+                                        cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Site Type',
+                                    datafield: 'site_type',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'OS Type',
+                                    datafield: 'os_type',
+                                        cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'OS Level',
+                                    datafield: 'oslevel',
+                                cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Bussines Unit',
+                                    datafield: 'bu',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    minwidth: 160
+                                }, {
+                                    text: 'Source',
+                                    datafield: 'source',
+                                        cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                            } , {
+                                    text: 'Decomission Requset',
+                                    datafield: 'decomission_request',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Category',
+                                    datafield: 'category',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Environment',
+                                    datafield: 'environment',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'In Scope For Patch',
+                                    datafield: 'in_scope_for_patch',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Updated By',
+                                    datafield: 'updated_by',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                },{
+                                    text: 'last_patched',
+                                    datafield: 'last_patched',
+                                cellbeginedit: cellbeginedit,
+                                         cellsrenderer: cellsrenderer,
+                                    width: 160
+                                },{
+                                    text: 'change_at',
+                                    datafield: 'change_at',
+                                cellbeginedit: cellbeginedit,
+                                 cellsrenderer: cellsrenderer,
+                                    width: 160
+                                }, {
+                                    text: 'Edit',
+                                    datafield: 'Edit',
+                                    columntype: 'button',
+                                    hidden: true,
+                                    cellsrenderer: function() {
+                                        return "Edit";
+                                    },
+                                    buttonclick: function(row) {
+                                        // open the popup window when the user clicks a button.
+                                        editrow = row;
+                                        var offset = $("#jqxgrid").offset();
+                                        $("#popupWindow").jqxWindow({
+                                             width: 350,
+                        resizable: false,
+                        theme: theme,
+                        isModal: true,
+                        autoOpen: false,
+                        cancelButton: $("#Cancel"),
+                        modalOpacity: 0.5,
+                        keyboardCloseKey: 'esc',
+                        title: 'Edit details'
+                                        // position: {
+                                          //      x: parseInt(offset.left) + 60,
+                                            //    y: parseInt(offset.top) + 60
+                                           // }
+                                        });
+
+                                        // get the clicked row's data and initialize the input fields.
+                                        var dataRecord = $("#jqxgrid").jqxGrid('getrowdata', editrow);
+                                        $("#ip").val(dataRecord.ip);
+                                        $("#fqdn").val(dataRecord.fqdn);
+                                        $("#server_name").val(dataRecord.server_name);
+
+                                        $("#serverowner").val(dataRecord.serverowner);
+                                        $("#application_name").val(dataRecord.application_name);
+                                        $("#app_support_contact").val(dataRecord.app_support_contact);
+                                        $("#console").val(dataRecord.console);
+                                        $("#machine_type").val(dataRecord.machine_type);
+                                        $("#site_type").val(dataRecord.site_type);
+                                        $("#os_type").val(dataRecord.os_type);
+                                        $("#oslevel").val(dataRecord.oslevel);
+                                        $("#bu").val(dataRecord.bu);
+                                        $("#source").val(dataRecord.source);
+                                        $("#decomission").val(dataRecord.decomission);
+                                        $("#decomission_request").val(dataRecord.decomission_request);
+                                        $("#category").val(dataRecord.category);
+                                        $("#environment").val(dataRecord.environment);
+                                        $("#in_scope_for_patch").val(dataRecord.in_scope_for_patch);
+                                         $("#updated_by").val(dataRecord.updated_by);
+                                         $("#last_patched").val(dataRecord.updated_by);
+                                        $("#change_at").val(dataRecord.change_at);
+
+
+
+                                        // show the popup window.
+                                        $("#popupWindow").jqxWindow('open');
+                                    }
+                                }
+
+                            ]
+                            /*jqxgrid*/
+                    });
+
+
+
+$("#ReplaceWindow").jqxWindow({
+                        width: 700,
+                        resizable: false,
+                        theme: theme,
+                        isModal: true,
+                        autoOpen: false,
+                        cancelButton: $("#Cancel"),
+                        modalOpacity: 0.5,
+                        keyboardCloseKey: 'esc',
+                        title: 'Replace details'
+                    });
+                    $("#Cancel").jqxButton({
+                        theme: theme
+                    });
+                    $("#Replace").jqxButton({
+                        theme: theme
+                    });
+
+                     $("#Replace").click(function() {
+                            var row = {
+                                find_field: $("#xyz :selected").val(),
+                                replace_field: $("#axyz :selected").val(),
+                                find_text: $("#find_text").val(),
+                                replace_old_text: $("#replace_old_text").val(),
+                                replace_new_text: $("#replace_new_text").val(),
+
+                            }
+                        $.ajax({
+                                type: "POST",
+                                url: "/find_replace/",
+                                data: row,
+
+                                success: function(data, status, xhr) {
+                                    }
+                                });
+                            });
+
+                $("#AddWindow").jqxWindow({
+                        width: 370,
+                        height:20000,
+                        theme: theme,
+                        isModal: true,
+                        autoOpen: false,
+                        cancelButton: $("#Cancel"),
+                        keyboardCloseKey: 'esc',
+                        title: 'Add details'
+                    });
+                    $("#Cancel").jqxButton({
+                        theme: theme
+                    });
+                    $("#Add").jqxButton({
+                        theme: theme
+                    });
+                    // update the added row when the user clicks the 'Save' button.
+                    $("#Add").click(function() {
+                        $('#testForm').jqxValidator('validate');
+                        var newrow = {};
+                        var newrow = {
+                            ip: $("#ip").val(),
+                            updated_by: $("#updated_by").val(),
+                            fqdn: $("#fqdn").val(),
+                            server_name: $("#server_name").val(),
+                            serverowner: $("#serverowner").val(),
+                            application_name: $("#application_name").val(),
+                            app_support_contact: $("#app_support_contact").val(),
+                            console: $("#console").val(),
+                            machine_type: $("#machine_type").val(),
+                            site_type: $("#site_type").val(),
+                            os_type: $("#os_type").val(),
+                            oslevel: $("#oslevel").val(),
+                            bu: $("#bu").val(),
+                            source: $("#source").val(),
+                            decomission: $("#decomission").val(),
+                            // date :$("#date ").val(),
+                            decomission_request: $("#decomission_request").val(),
+                            category: $("#category").val(),
+                            environment: $("#environment").val(),
+                            in_scope_for_patch: $("#in_scope_for_patch").val(),
+                            last_patched: $("#last_patched").val(),
+                            change_at: $("#change_at").val(),
+                        };
+                        $("#jqxgrid").jqxGrid('addrow', null, newrow);
+                        $("#AddWindow").jqxWindow('hide');
+                        $("#jqxgrid").jqxGrid('updatebounddata');
+
+                    });
+
+                          $('#testForm').jqxValidator({
+                  rules: [
+                           { input: '#ip', message: 'ip is required!', action: 'keyup, blur', rule: 'required' },
+                           { input: '#ip', message: 'Your username must be between 3 and 12 characters!', action: 'keyup, blur', rule: 'length=3,12' },
+                           { input: '#updated_by', message: 'updated by is required!', action: 'keyup, blur', rule: 'required' }
+                                ]
+                             });
+
+
+                    $("#jqxgrid").bind('cellclick', function(event) {
+                        var args = event.args;
+                        var dataField = args.datafield;
+                        var ip = args.value;
+                        var dd = {
+                            ip: ip,
+                        }
+                        if (dataField == "ip") {
+                            $.ajax({
+                                type: "POST",
+                                url: "/ip_datas/",
+                                data: dd,
+                                success: function(response) {
+                                    var data = response['data'];
+                                    var theme = 'classic';
+                                    var gridData = data;
+                                    var gridSource = {
+                                        localdata: gridData,
+                                        deleterow: function(data, commit) {
+                                            var data = data;
+                                            $.ajax({
+                                                type: "POST",
+                                                url: '/delete_row/',
+                                                data: data,
+                                                success: function(rowdata, status, xhr) {
+                                                    commit(true);
+                                                }
+                                            });
+                                        }
+                                    }
+                                    gridDataAdapter = new $.jqx.dataAdapter(gridSource);
+                                    $("#jqxgrid1").jqxGrid({
+                                        width: 1330,
+                                        source: gridDataAdapter,
+                                        pageable: true,
+                                        autoheight: true,
+                                        selectionmode: 'checkbox',
+                                        altrows: true,
+                                        showtoolbar: true,
+                                        rendertoolbar: function(toolbar) {
+                                            var me = this;
+                                            var container = $("<div style='margin: 5px;'></div>");
+                                            toolbar.append(container);
+                                            container.append('<input id="deleterowbutton" type="button" value="Delete Row" />');
+                                            $("#deleterowbutton").jqxButton();
+                                            $('#deleterowbutton').click(function() {
+                                                var selectedrowindex = $("#jqxgrid1").jqxGrid('getselectedrowindex');
+                                                var rowscount = $("#jqxgrid1").jqxGrid('getdatainformation').rowscount;
+
+                                                console.log(selectedrowindex);
+                                                console.log(rowscount);
+                                                if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+                                                    var rowid = $("#jqxgrid1").jqxGrid('getrowid', selectedrowindex);
+                                                    var rows = $('#jqxgrid1').jqxGrid('getrows');
+
+                                                    var ip = rows[rowid].ip;
+                                                    var fqdn = rows[rowid].fqdn;
+                                                    var server_name = rows[rowid].server_name;
+                                                    var serverowner = rows[rowid].serverowner;
+                                                    var application_name = rows[rowid].application_name;
+                                                    var app_support_contact = rows[rowid].app_support_contact;
+                                                    var console = rows[rowid].console;
+                                                    var machine_type = rows[rowid].machine_type;
+                                                    var site_type = rows[rowid].site_type;
+                                                    var os_type = rows[rowid].os_type;
+                                                    var oslevel = rows[rowid].oslevel;
+                                                    var bu = rows[rowid].bu;
+                                                    var source = rows[rowid].source;
+                                                    var decomission = rows[rowid].decomission;
+                                                    var decomission_request = rows[rowid].decomission_request;
+                                                    var category = rows[rowid].category;
+                                                    var environment = rows[rowid].environment;
+                                                    var in_scope_for_patch = rows[rowid].in_scope_for_patch;
+                                                    var updated_by = rows[rowid].updated_by;
+                                                    var last_patched = rows[rowid].last_patched;
+                                                    var change_at = rows[rowid].change_at;
+
+                                                    var data = {
+                                                        rowid: rowid,
+                                                        ip: ip,
+                                                        fqdn: fqdn,
+                                                        server_name: server_name,
+                                                        serverowner: serverowner,
+                                                        application_name: application_name,
+                                                        app_support_contact: app_support_contact,
+                                                        console: console,
+                                                        machine_type: machine_type,
+                                                        site_type: site_type,
+                                                        os_type: os_type,
+                                                        oslevel: oslevel,
+                                                        bu: bu,
+                                                        source: source,
+                                                        decomission: decomission,
+                                                        decomission_request: decomission_request,
+                                                        category: category,
+                                                        environment: environment,
+                                                        in_scope_for_patch: in_scope_for_patch,
+                                                        updated_by: updated_by,
+                                                        last_patched: last_patched,
+                                                        change_at: change_at,
+
+                                                    }
+                                                    var commit = $("#jqxgrid1").jqxGrid('deleterow', data);
+
+                                                }
+                                            });
+
+
+                                        },
+
+                                        columns: [{
+                                                text: 'IP',
+                                                datafield: 'ip',
+                                                width: 160
+                                            }, {
+                                                text: 'FQDN',
+                                                datafield: 'fqdn',
+                                                width: 160
+                                            }, {
+                                                text: 'Server Name',
+                                                datafield: 'server_name',
+                                                width: 160
+                                            }, {
+                                                text: 'Server Owner',
+                                                datafield: 'serverowner',
+                                                width: 160
+                                            }, {
+                                                text: 'Application Name',
+                                                datafield: 'application_name',
+                                                width: 160
+                                            }, {
+                                                text: 'App Support Conatct',
+                                                datafield: 'app_support_contact',
+                                                minwidth: 160
+                                            }, {
+                                                text: 'Console',
+                                                datafield: 'console',
+                                                width: 160
+                                            }, {
+                                                text: 'Machine Type',
+                                                datafield: 'machine_type',
+                                                width: 160
+                                            }, {
+                                                text: 'Site Type',
+                                                datafield: 'site_type',
+                                                width: 160
+                                            }, {
+                                                text: 'OS Type',
+                                                datafield: 'os_type',
+                                                width: 160
+                                            }, {
+                                                text: 'OS Level',
+                                                datafield: 'oslevel',
+                                                width: 160
+                                            }, {
+                                                text: 'Bussines Unit',
+                                                datafield: 'bu',
+                                                minwidth: 160
+                                            }, {
+                                                text: 'Source',
+                                                datafield: 'source',
+                                                width: 160
+                                            }, {
+                                                text: 'Decomission',
+                                                datafield: 'decomission',
+                                                width: 160
+                                            }, {
+                                                text: 'Decomission Requset',
+                                                datafield: 'decomission_request',
+                                                width: 160
+                                            }, {
+                                                text: 'Category',
+                                                datafield: 'category',
+                                                width: 160
+                                            }, {
+                                                text: 'Environment',
+                                                datafield: 'environment',
+                                                width: 160
+                                            }, {
+                                                text: 'In Scope For Patch',
+                                                datafield: 'in_scope_for_patch',
+                                                width: 160
+                                            }, {
+                                                text: 'Updated By',
+                                                datafield: 'updated_by',
+                                                width: 160
+                                            }
+                                            , {
+                                                text: 'Last Patched',
+                                                datafield: 'last_patched',
+                                                width: 160
+                                            }, {
+                                                text: 'Change At',
+                                                datafield: 'change_at',
+                                                width: 160
+                                            }
+
+                                        ]
+
+                                    });
+
+
+
+
+                                    /*success*/
+                                }
+                            });
+                        }
+                    });
+
+                    function setGlobalFilter(filtervalue) {
+                        var columns = $("#jqxgrid").jqxGrid('columns');
+                        var filtergroup, filter;
+                        for (var i = 0; i < columns.records.length; i++) {
+                            if (!columns.records[i].hidden && columns.records[i].filterable) {
+                                filtergroup = new $.jqx.filter();
+                                filtergroup.operator = 'or';
+                                filter = filtergroup.createfilter('stringfilter', filtervalue, 'contains');
+                                filtergroup.addfilter(1, filter);
+                                $("#jqxgrid").jqxGrid('addfilter', columns.records[i].datafield, filtergroup);
+                            }
+                        }
+                        $("#jqxgrid").jqxGrid('applyfilters');
+                    }
+
+                    $("#popupWindow").jqxWindow({
+                        width: 250,
+                        resizable: false,
+                        isModal: true,
+                        autoOpen: false,
+                        cancelButton: $("#Cancel"),
+                        modalOpacity: 0.01
+                    });
+
+                    $("#popupWindow").on('open', function() {
+                        $("#ip").jqxInput('selectAll');
+                    });
+
+                    $("#Cancel").jqxButton({
+                        theme: theme
+                    });
+                    $("#Save").jqxButton({
+                        theme: theme
+                    });
+
+                    // update the edited row when the user clicks the 'Save' button.
+                    $("#Save").click(function() {
+                        if (editrow >= 0) {
+                            var row = {
+                                ip: $("#ip").val(),
+                                fqdn: $("#fqdn").val(),
+                                server_name: $("#server_name").val(),
+
+                                serverowner: $("#serverowner").val(),
+                                application_name: $("#application_name").val(),
+                                app_support_contact: $("#app_support_contact").val(),
+                                console: $("#console").val(),
+                                machine_type: $("#machine_type").val(),
+                                site_type: $("#site_type").val(),
+                                os_type: $("#os_type").val(),
+                                oslevel: $("#oslevel").val(),
+                                bu: $("#bu").val(),
+                                source: $("#source").val(),
+                                decomission: $("#decomission").val(),
+                                decomission_request: $("#decomission_request").val(),
+                                category: $("#category").val(),
+                                environment: $("#environment").val(),
+                                in_scope_for_patch: $("#in_scope_for_patch").val(),
+                                updated_by: $("#updated_by").val(),
+                                last_patched: $("#last_patched").val(),
+                                change_at: $("#change_at").val()
+                            };
+                            var rowID = $('#jqxgrid').jqxGrid('getrowid', editrow);
+                            $('#jqxgrid').jqxGrid('updaterow', rowID, row);
+                            $("#popupWindow").jqxWindow('hide');
+                        }
+                    });
+
+
+                    /*success*/
+                }
+
+                /*ajax*/
+            });
+            /*ready*/
+        });
+    </script>
+</head>
+
+<body onload='myFunction()' class='default'>
+<style>
+ .red {
+            color: black\9;
+            background-color: #f07b7b\9;
+        }
+.yellow {
+            color: black\9;
+            background-color: yellow\9;
+        }
+
+</style>
+<div id="myProgress"
+  <div id="myBar">
+    <div id="label">Loading</div>
+  </div>
+</div>
+<div id="pg_ld">
+      <p><a href="http://10.149.98.123:8080/import/">Upload</a></p>
+
+    <div id='jqxWidget' style="font-size: 13px; font-family: Verdana; float: left;">
+        <div id="jqxgrid"></div>
+    </div>
+    <div id="AddWindow">
+        <div>Add</div>
+        <div style="overflow: hidden;">
+          <form id="testForm" action="./">
+            <table>
+                <tr>
+                    <td align="right">ip:</td>
+                    <td align="left"><input type="text" id="ip" class="text-input" name="ip" /></td>
+                </tr>
+                <tr>
+                    <td align="right">FQDN:</td>
+                    <td align="left"><input  id="fqdn" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Server Name:</td>
+                    <td align="left"><input id="server_name" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Server Owner:</td>
+                    <td align="left"><input id="serverowner" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Application Name::</td>
+                    <td align="left"><input  id="application_name" /></td>
+                </tr>
+                <tr>
+                    <td align="right">App Support Contact:</td>
+                    <td align="left"><input id="app_support_contact" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Console:</td>
+                    <td align="left"><input id="console" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Machine Type :</td>
+                    <td align="left"><input id="machine_type" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Site Type:</td>
+                    <td align="left"><input id="site_type" /></td>
+                </tr>
+                <tr>
+                    <td align="right">OS Type:</td>
+                    <td align="left"><input id="os_type" /></td>
+                </tr>
+                <tr>
+                    <td align="right">OS Level:</td>
+                    <td align="left"><input id="oslevel" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Bussines Unit:</td>
+                    <td align="left"><input id="bu" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Source:</td>
+                    <td align="left"><input id="source" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Decomission:</td>
+                    <td align="left"><input id="decomission" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Decomission Requset:</td>
+                    <td align="left"><input id="decomission_request" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Category:</td>
+                    <td align="left"><input  id="category" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Environment:</td>
+                    <td align="left"><input id="environment" /></td>
+                </tr>
+                <tr>
+                    <td align="right">In Scope for Patch:</td>
+                    <td align="left"><input id="in_scope_for_patch" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Updated by:</td>
+                    <td align="left"><input id="updated_by" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Last Patched:</td>
+                    <td align="left"><input id="last_patched" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Change At:</td>
+                    <td align="left"><input id="change_at" /></td>
+                </tr>
+                <tr>
+                    <td align="right"></td>
+                    <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Add" value="Add" /><input id="Cancel"
+
+type="button" value="Cancel" /></td>
+                </tr>
+            </table>
+</form>
+        </div>
+    </div>
+
+<div id="customfiltering">
+<form action="" method="get">
+  <input type="checkbox" name="" value="" id="ip" checked> IP<br>
+  <input type="checkbox" name="" value="" id="fqdn" checked> FQDN<br>
+  <input type="checkbox" name="" value="" id="server_name" > Server Name<br>
+  <input type="checkbox" name="" value="" id="serverowner" > Server Owner<br>
+  <input type="checkbox" name="" value="" id="application_name" > Application Name<br>
+  <input type="checkbox" name="" value="" id="app_support_contact" > App Support<br>
+  <input type="checkbox" name="" value="" id="machine_type" > Machine Type<br>
+  <input type="checkbox" name="" value="" id="site_type" > Site Type<br>
+  <input type="checkbox" name="" value="" id="os_type" > OS Type<br>
+  <input type="checkbox" name="" value="" id="oslevel" > OS Level<br>
+  <input type="checkbox" name="" value="" id="bu" > BU<br>
+  <input type="checkbox" name="" value="" id="source" > Source<br>
+  <input type="checkbox" name="" value="" id="decomission" checked> Decomission<br>
+  <input type="checkbox" name="" value="" id="decomission_request" > Decom Request<br>
+  <input type="checkbox" name="" value="" id="category" > Category<br>
+  <input type="checkbox" name="" value="" id="in_scope_for_patch" > In Scope for Patch<br>
+  <input type="checkbox" name="" value="" id="updated_by" > Updated<br>
+  <input type="checkbox" name="" value="" id="last_patched" > Last Patched<br>
+  <input type="checkbox" name="" value="" id="change_at" > Change At<br>
+  <input type="submit" value="Submit">
+</form>
+</div>
+
+ <div id="ReplaceWindow">
+        <div>Find</div>
+        <div style="overflow: hidden;">
+
+            <table>
+                <tr>
+
+                   <td align="right" class ="select">Find Field:</td>
+                    <td align="left">
+<select id="xyz">
+         <option value="ip">IP</option>
+            <option value="fqdn">FQDN</option>
+            <option value="server_name">Server Name</option>
+            <option value="application_name">App Support Contact</option>
+           <option value="console">Console</option>
+            <option value="machine_type">Machine Type</option>
+            <option value="site_type">Site Type</option>
+            <option value="os_type">os_type</option>
+            <option value="oslevel">oslevel</option>
+            <option value="bu">Bussines Unit</option>
+            <option value="source">source</option>
+            <option value="decomission">decomission</option>
+            <option value="decomission_request">decomission_request</option>
+            <option value="category">category</option>
+            <option value="environment">environment</option>
+            <option value="in_scope_for_patch">in_scope_for_patch</option>
+            <option value="updated_by">updated_by</option>
+       </select>
+    </td>
+<td align="right" class ="select">Replace Field:</td>
+                    <td align="left">
+<select id="axyz">
+            <option value="fqdn">FQDN</option>
+            <option value="server_name">Server Name</option>
+            <option value="application_name">App Support Contact</option>
+           <option value="console">Console</option>
+            <option value="machine_type">Machine Type</option>
+            <option value="site_type">Site Type</option>
+            <option value="os_type">os_type</option>
+            <option value="oslevel">oslevel</option>
+            <option value="bu">Bussines Unit</option>
+            <option value="source">source</option>
+            <option value="decomission">decomission</option>
+            <option value="decomission_request">decomission_request</option>
+            <option value="category">category</option>
+            <option value="environment">environment</option>
+            <option value="in_scope_for_patch">in_scope_for_patch</option>
+            <option value="updated_by">updated_by</option>
+
+       </select>
+    </td>
+                </tr>
+<tr>
+<td align="right">Find Text:</td>
+<td align="left"><input id="find_text"/></td>
+<td align="right">Replace Old Text:</td>
+<td align="left"><input id="replace_old_text"/></td>
+
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td align="right">Replace New Text:</td>
+<td align="left"><input id="replace_new_text"/></td>
+</tr>
+<tr>
+   <td align="center"></td>
+    <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Replace" value="Replace" /><input id="Cancel"
+
+type="button" value="Cancel" /></td>
+                </tr>
+
+  </table>
+</div>
+</div>
+
+
+
+   <div id="popupWindow">
+        <div>Edit</div>
+        <div style="overflow: hidden;">
+            <table>
+                <tr>
+                    <td align="right">IP:</td>
+                    <td align="left"><input id="ip" type="text" /></td>
+                </tr>
+                <tr>
+                    <td align="right">FQDN:</td>
+                    <td align="left"><input id="fqdn" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Server Name:</td>
+                    <td align="left"><input id="server_name" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Server Owner:</td>
+                    <td align="left"><input id="serverowner" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Application Name::</td>
+                    <td align="left"><input id="application_name" /></td>
+                </tr>
+                <tr>
+                    <td align="right">App Support Contact:</td>
+                    <td align="left"><input id="app_support_contact" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Console:</td>
+                    <td align="left"><input id="console" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Machine Type :</td>
+                    <td align="left"><input id="machine_type" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Site Type:</td>
+                    <td align="left"><input id="site_type" /></td>
+                </tr>
+                <tr>
+                    <td align="right">OS Type:</td>
+                    <td align="left"><input id="os_type" /></td>
+                </tr>
+                <tr>
+                    <td align="right">OS Level:</td>
+                    <td align="left"><input id="oslevel" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Bussines Unit:</td>
+                    <td align="left"><input id="bu" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Source:</td>
+                    <td align="left"><input id="source" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Decomission:</td>
+                    <td align="left"><input id="decomission" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Decomission Requset:</td>
+                    <td align="left"><input id="decomission_request" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Category:</td>
+                    <td align="left"><input id="category" /></td>
+                </tr>
+                <tr>
+                    <td align="right">Environment:</td>
+                    <td align="left"><input id="environment" /></td>
+                </tr>
+                <tr>
+                    <td align="right">In Scope for Patch:</td>
+                    <td align="left"><input id="in_scope_for_patch" /></td>
+                </tr>
+                <tr>
+                    <td align="right"></td>
+                    <td style="padding-top: 10px;" align="right"><input style="margin-right: 5px;" type="button" id="Save" value="Save" /><input id="Cancel"
+
+type="button" value="Cancel" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+ <div id='jqxWidget1' style="font-size: 13px; font-family: Verdana; float: left;">
+        <br/>
+
+        <br/>
+        <div id="jqxgrid1"></div>
+    </div>
+</div>
+</body>
+
+</html>
