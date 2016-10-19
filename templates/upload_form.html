@@ -1,0 +1,27 @@
+<html>
+<head>
+    <!-- <title>{{title}}</title> -->
+</head>
+<body>
+    <!-- <h1>{{header}}</h1> -->
+
+<p> <a href="http://10.149.98.123:8080/static/sample.xlsx" download="sample.xlsx">Click here to download sample excel file</a></p>
+
+<p> <a href="http://10.149.98.123:8080/import_to_excel" download="sample.xlsx">Click here to download Master Inventory into excel file</a></p>
+
+
+    {% if form.errors %}
+        <p style="color: red;">
+            Please correct the error{{ form.errors|pluralize }} below.
+        </p>
+    {% endif %}
+
+    <form action="" enctype="multipart/form-data"  method="post">
+        <table>
+            {{ form.as_table }}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
